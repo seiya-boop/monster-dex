@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About | モンスト図鑑</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+<h1>About</h1>
+</header>
+
+<main class="about-page">
+
+<section>
+<h2>このサイトについて</h2>
+
+<p>
+本サイトはスマートフォンゲーム「モンスターストライク」に登場するキャラクターの情報を整理するために制作した、
+非公式のファンツールです。
+</p>
+
+<p>
+キャラクターの特徴や属性、イベントなどの情報を検索・整理できる
+個人用の図鑑として作成しています。
+</p>
+
+<p>
+本サイトは個人が趣味として制作しているものであり、
+株式会社MIXIおよびモンスターストライク公式とは一切関係ありません。
+</p>
+</section>
+
+<section>
+<h2>掲載データについて</h2>
+
+<p>
+キャラクターの情報はゲーム内の内容や、
+プレイヤーコミュニティなどで共有されている情報を参考に整理しています。
+</p>
+
+<p>
+データの正確性には注意していますが、
+誤りや不足が含まれる可能性があります。
+</p>
+
+</section>
+
+<section>
+<h2>画像および著作権について</h2>
+
+<p>
+当サイト上で使用しているゲーム画像の著作権および商標権、
+その他知的財産権は株式会社MIXIおよび当該コンテンツの提供元に帰属します。
+</p>
+
+<p>
+本サイトではキャラクター紹介および情報整理を目的として
+ゲーム画像を引用しています。
+</p>
+
+<p>
+当サイトは非営利目的で制作されています。
+</p>
+
+<p>
+(C) mixi, Inc. All rights reserved.
+</p>
+
+<p>
+<a href="https://www.monster-strike.com/" target="_blank">
+モンスターストライク公式サイト
+</a>
+</p>
+
+</section>
+
+<section>
+<h2>免責事項</h2>
+
+<p>
+本サイトの情報によって生じた
+いかなる損害についても責任を負いかねます。
+</p>
+
+<p>
+掲載内容は予告なく変更される場合があります。
+</p>
+
+</section>
+
+</main>
+
+</body>
+</html>
