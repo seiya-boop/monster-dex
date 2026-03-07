@@ -401,4 +401,22 @@ margin: 12px 0;
 color: #444;
 }
 
+.site-footer {
+margin-top:40px;
+padding:30px 20px;
+text-align:center;
+font-size:13px;
+color:#666;
+background:#f2f4f8;
+line-height:1.7;
+}
+
+.site-footer a{
+color:#4d8df0;
+text-decoration:none;
+}
+
+.site-footer a:hover{
+text-decoration:underline;
+}
 
