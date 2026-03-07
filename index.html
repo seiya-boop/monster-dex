@@ -206,11 +206,13 @@
           }).join("");
 
           const buttons = document.querySelectorAll(".card-button");
-          buttons.forEach((button, index) => {
-            button.addEventListener("click", () => {
-              openModal(filtered[index]);
-            });
-          });
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    const i = button.getAttribute("data-index");
+    openModal(filtered[i]);
+  });
+});
         }
 
         populateEventFilter();
@@ -241,3 +243,4 @@
   </script>
 </body>
 </html>
+
