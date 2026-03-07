@@ -9,34 +9,70 @@ body.modal-open {
   overflow: hidden;
 }
 
+/* =========================
+   Header
+========================= */
 .header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   background: #fff;
   padding: 16px;
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.header h1 {
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-top h1 {
   margin: 0;
   font-size: 24px;
 }
 
+.menu-toggle {
+  display: none;
+  border: 1px solid #cfd4dc;
+  background: #fff;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.filter-panel {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
 #search,
+#tagSearch,
 #elementFilter,
 #genderFilter,
 #gachaFilter,
-#eventFilter {
+#eventFilter,
+#raceFilter {
   padding: 10px 12px;
   font-size: 14px;
   border: 1px solid #cfd4dc;
   border-radius: 8px;
   background: #fff;
+  box-sizing: border-box;
+}
+
+/* =========================
+   Card List
+========================= */
+main {
+  width: 100%;
 }
 
 .card-list {
@@ -44,9 +80,12 @@ body.modal-open {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .card {
+  min-width: 0;
+  width: 100%;
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
@@ -55,6 +94,7 @@ body.modal-open {
 
 .card-button {
   width: 100%;
+  min-width: 0;
   border: 0;
   background: transparent;
   padding: 0;
@@ -81,6 +121,8 @@ body.modal-open {
   font-weight: bold;
   margin-bottom: 10px;
   color: #222;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .card-meta-row {
@@ -127,11 +169,32 @@ body.modal-open {
   color: #666;
 }
 
+.card-tag-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.mini-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f1f3f8;
+  font-size: 12px;
+  color: #666;
+  max-width: 100%;
+}
+
 .empty-message {
   padding: 20px;
   color: #666;
 }
 
+/* =========================
+   Modal
+========================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -231,6 +294,12 @@ body.modal-open {
   background: #eef1f8;
   font-size: 13px;
   color: #444;
+  border: 0;
+  cursor: pointer;
+}
+
+.tag-chip:hover {
+  background: #dfe6f5;
 }
 
 .tag-empty {
@@ -238,106 +307,55 @@ body.modal-open {
   color: #888;
 }
 
-@media (max-width: 640px) {
-  .header h1 {
-    width: 100%;
-  }
+/* =========================
+   Footer / About
+========================= */
+.site-footer {
+  margin-top: 40px;
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  background: #f2f4f8;
+  line-height: 1.7;
+}
 
-  #search,
-  #elementFilter,
-  #genderFilter,
-  #gachaFilter,
-  #eventFilter {
-    width: 100%;
-  }
+.site-footer a {
+  color: #4d8df0;
+  text-decoration: none;
+}
 
-  .card-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+.about-page {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px 20px;
+  line-height: 1.8;
+}
+
+.about-page h2 {
+  margin-top: 40px;
+  font-size: 20px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+}
+
+.about-page p {
+  margin: 12px 0;
+  color: #444;
+}
+
+/* =========================
+   Smartphone
+========================= */
+@media (max-width: 768px) {
+  .header {
     padding: 12px;
   }
 
-  .card-title {
-    font-size: 16px;
-  }
-
-  .modal {
-    max-height: 92vh;
-  }
-
-  .modal-title {
-    font-size: 22px;
-  }
-}body {
-  font-family: sans-serif;
-  margin: 0;
-  background: #f6f7fb;
-  color: #222;
-}
-
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #fff;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.header-top h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.menu-toggle {
-  display: none;
-  border: 1px solid #cfd4dc;
-  background: #fff;
-  border-radius: 10px;
-  width: 44px;
-  height: 44px;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.filter-panel {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 12px;
-}
-
-#search,
-#tagSearch,
-#elementFilter,
-#genderFilter,
-#gachaFilter,
-#eventFilter,
-#raceFilter {
-  padding: 10px 12px;
-  font-size: 14px;
-  border: 1px solid #cfd4dc;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  padding: 20px;
-}
-
-@media (max-width: 768px) {
   .menu-toggle {
     display: inline-flex;
     align-items: center;
@@ -363,38 +381,16 @@ body.modal-open {
   #eventFilter,
   #raceFilter {
     width: 100%;
-    box-sizing: border-box;
-  }
-
-  main {
-    width: 100%;
   }
 
   .card-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
     padding: 10px;
-    box-sizing: border-box;
   }
 
   .card {
-    min-width: 0;
-    width: 100%;
     border-radius: 14px;
-    overflow: hidden;
-  }
-
-  .card-button {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .card-button img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    display: block;
   }
 
   .card-body {
@@ -403,15 +399,12 @@ body.modal-open {
 
   .card-title {
     font-size: 14px;
-    line-height: 1.4;
     margin-bottom: 6px;
-    word-break: break-word;
   }
 
   .card-meta-row {
     gap: 4px;
     margin-bottom: 6px;
-    flex-wrap: wrap;
   }
 
   .element-badge {
@@ -424,192 +417,14 @@ body.modal-open {
   }
 
   .card-tag-preview {
-    gap: 4px;
-    margin-top: 6px;
+    display: none;
   }
 
-  .mini-tag {
-    font-size: 10px;
-    padding: 2px 6px;
-    max-width: 100%;
+  .modal {
+    max-height: 92vh;
+  }
+
+  .modal-title {
+    font-size: 22px;
   }
 }
-.header h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-#search,
-#elementFilter {
-  padding: 10px 12px;
-  font-size: 14px;
-  border: 1px solid #cfd4dc;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  padding: 20px;
-}
-
-.card {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.card-toggle {
-  width: 100%;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  cursor: pointer;
-  display: block;
-}
-
-.card-toggle img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-  background: #eee;
-}
-
-.card-body {
-  padding: 14px;
-}
-
-.card-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #222;
-}
-
-.meta {
-  font-size: 14px;
-  color: #666;
-}
-
-.card-detail {
-  border-top: 1px solid #eceff4;
-  padding: 14px;
-  background: #fafbff;
-}
-
-.detail-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #444;
-}
-
-.detail-row:last-child {
-  margin-bottom: 0;
-}
-
-.detail-label {
-  font-size: 12px;
-  color: #7a8190;
-  font-weight: bold;
-  letter-spacing: 0.03em;
-}
-
-.empty-message {
-  padding: 20px;
-  color: #666;
-}
-
-.about-page {
-max-width: 800px;
-margin: auto;
-padding: 40px 20px;
-line-height: 1.8;
-}
-
-.about-page h2 {
-margin-top: 40px;
-font-size: 20px;
-border-bottom: 2px solid #eee;
-padding-bottom: 6px;
-}
-
-.about-page p {
-margin: 12px 0;
-color: #444;
-}
-
-.site-footer {
-margin-top:40px;
-padding:30px 20px;
-text-align:center;
-font-size:13px;
-color:#666;
-background:#f2f4f8;
-line-height:1.7;
-}
-
-.site-footer a{
-color:#4d8df0;
-text-decoration:none;
-}
-
-.site-footer a:hover{
-text-decoration:underline;
-}
-
-.modal-overlay[hidden] {
-  display: none !important;
-}
-
-#tagSearch,
-#raceFilter {
-  padding: 10px 12px;
-  font-size: 14px;
-  border: 1px solid #cfd4dc;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.card-tag-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.mini-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: #f1f3f8;
-  font-size: 12px;
-  color: #666;
-}
-
-.tag-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 10px;
-  border-radius: 999px;
-  background: #eef1f8;
-  font-size: 13px;
-  color: #444;
-  border: 0;
-  cursor: pointer;
-}
-
-.tag-chip:hover {
-  background: #dfe6f5;
-}
-
-
