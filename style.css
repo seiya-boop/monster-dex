@@ -5,6 +5,272 @@ body {
   color: #222;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+#search,
+#elementFilter,
+#genderFilter,
+#gachaFilter,
+#eventFilter {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #cfd4dc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.card-button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  display: block;
+}
+
+.card-button img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: #eee;
+}
+
+.card-body {
+  padding: 14px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.card-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.element-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.badge-fire {
+  background: #e45757;
+}
+
+.badge-water {
+  background: #4d8df0;
+}
+
+.badge-wood {
+  background: #4ea75d;
+}
+
+.badge-light {
+  background: #d6b335;
+}
+
+.badge-dark {
+  background: #7e5ac8;
+}
+
+.gender-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.empty-message {
+  padding: 20px;
+  color: #666;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal {
+  width: min(920px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+}
+
+.modal-close {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  display: block;
+  border: 0;
+  background: #fff;
+  font-size: 30px;
+  line-height: 1;
+  padding: 16px 18px 0 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.modal-image-wrap {
+  padding: 0 24px 24px;
+}
+
+.modal-image {
+  width: 100%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto;
+}
+
+.modal-body {
+  padding: 0 24px 24px;
+}
+
+.modal-title {
+  margin: 0 0 16px;
+  font-size: 28px;
+}
+
+.modal-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.modal-meta-item {
+  background: #f7f8fc;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 12px;
+  color: #7a8190;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.tags-section {
+  margin-top: 8px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #eef1f8;
+  font-size: 13px;
+  color: #444;
+}
+
+.tag-empty {
+  font-size: 13px;
+  color: #888;
+}
+
+@media (max-width: 640px) {
+  .header h1 {
+    width: 100%;
+  }
+
+  #search,
+  #elementFilter,
+  #genderFilter,
+  #gachaFilter,
+  #eventFilter {
+    width: 100%;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .card-title {
+    font-size: 16px;
+  }
+
+  .modal {
+    max-height: 92vh;
+  }
+
+  .modal-title {
+    font-size: 22px;
+  }
+}body {
+  font-family: sans-serif;
+  margin: 0;
+  background: #f6f7fb;
+  color: #222;
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -111,3 +377,4 @@ body {
   padding: 20px;
   color: #666;
 }
+
