@@ -1,70 +1,98 @@
-<script>
-  async function loadData() {
-    try {
-      const res = await fetch("data.json");
-      if (!res.ok) {
-        throw new Error("data.json の読み込みに失敗しました: " + res.status);
-      }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>モンスト図鑑</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>モンスト図鑑</h1>
+    <input id="search" type="text" placeholder="キャラ名で検索" />
+    <select id="elementFilter">
+      <option value="">全属性</option>
+      <option value="火">火</option>
+      <option value="水">水</option>
+      <option value="木">木</option>
+      <option value="光">光</option>
+      <option value="闇">闇</option>
+    </select>
+  </header>
 
-      const data = await res.json();
+  <main>
+    <div id="cardList" class="card-list"></div>
+  </main>
 
-      const searchInput = document.getElementById("search");
-      const elementFilter = document.getElementById("elementFilter");
-      const cardList = document.getElementById("cardList");
-
-      function normalizeTags(tags) {
-        if (Array.isArray(tags)) return tags;
-        if (typeof tags === "string" && tags.trim() !== "") {
-          return tags.split(",").map(tag => tag.trim()).filter(Boolean);
-        }
-        return [];
-      }
-
-      function render() {
-        const keyword = searchInput.value.trim().toLowerCase();
-        const element = elementFilter.value;
-
-        const filtered = data.filter(chara => {
-          const matchName = (chara.name || "").toLowerCase().includes(keyword);
-          const matchElement = !element || chara.element === element;
-          return matchName && matchElement;
-        });
-
-        if (filtered.length === 0) {
-          cardList.innerHTML = '<p style="padding:20px;">該当キャラがいません。</p>';
-          return;
+  <script>
+    async function loadData() {
+      try {
+        const res = await fetch("data.json");
+        if (!res.ok) {
+          throw new Error("data.json の読み込みに失敗しました: " + res.status);
         }
 
-        cardList.innerHTML = filtered.map(chara => {
-          const tags = normalizeTags(chara.tags);
-          const imageSrc = chara.image_base && chara.image_base.trim() !== ""
-            ? chara.image_base
-            : "https://placehold.co/400x400?text=No+Image";
+        const data = await res.json();
 
-          return `
-            <article class="card">
-              <img src="${imageSrc}" alt="${chara.name || ''}">
-              <div class="card-body">
-                <div class="card-title">${chara.name || ''}</div>
-                <div class="meta">${chara.element || ''} / ${chara.gender || ''}</div>
-                <div class="meta">${chara.gachaType || ''} / ${chara.eventName || ''}</div>
-                <div class="meta">${tags.join(" / ")}</div>
-              </div>
-            </article>
-          `;
-        }).join("");
+        const searchInput = document.getElementById("search");
+        const elementFilter = document.getElementById("elementFilter");
+        const cardList = document.getElementById("cardList");
+
+        function normalizeTags(tags) {
+          if (Array.isArray(tags)) return tags;
+          if (typeof tags === "string" && tags.trim() !== "") {
+            return tags.split(",").map(tag => tag.trim()).filter(Boolean);
+          }
+          return [];
+        }
+
+        function render() {
+          const keyword = searchInput.value.trim().toLowerCase();
+          const element = elementFilter.value;
+
+          const filtered = data.filter(chara => {
+            const matchName = (chara.name || "").toLowerCase().includes(keyword);
+            const matchElement = !element || chara.element === element;
+            return matchName && matchElement;
+          });
+
+          if (filtered.length === 0) {
+            cardList.innerHTML = '<p style="padding:20px;">該当キャラがいません。</p>';
+            return;
+          }
+
+          cardList.innerHTML = filtered.map(chara => {
+            const tags = normalizeTags(chara.tags);
+            const imageSrc = chara.image_base && chara.image_base.trim() !== ""
+              ? chara.image_base
+              : "https://placehold.co/400x400?text=No+Image";
+
+            return `
+              <article class="card">
+                <img src="${imageSrc}" alt="${chara.name || ''}">
+                <div class="card-body">
+                  <div class="card-title">${chara.name || ''}</div>
+                  <div class="meta">${chara.element || ''} / ${chara.gender || ''}</div>
+                  <div class="meta">${chara.gachaType || ''} / ${chara.eventName || ''}</div>
+                  <div class="meta">${tags.join(" / ")}</div>
+                </div>
+              </article>
+            `;
+          }).join("");
+        }
+
+        searchInput.addEventListener("input", render);
+        elementFilter.addEventListener("change", render);
+
+        render();
+      } catch (error) {
+        console.error(error);
+        document.getElementById("cardList").innerHTML =
+          '<p style="padding:20px;">データの読み込みでエラーが起きました。Console を確認してください。</p>';
       }
-
-      searchInput.addEventListener("input", render);
-      elementFilter.addEventListener("change", render);
-
-      render();
-    } catch (error) {
-      console.error(error);
-      document.getElementById("cardList").innerHTML =
-        '<p style="padding:20px;">データの読み込みでエラーが起きました。Console を確認してください。</p>';
     }
-  }
 
-  loadData();
-</script>
+    loadData();
+  </script>
+</body>
+</html>
