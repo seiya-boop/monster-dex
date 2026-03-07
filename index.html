@@ -141,7 +141,7 @@
 
         function populateFilters() {
           const eventNames = [...new Set(
-            data.map(item => item.eventName).filter(Boolean)
+            data.map(item => item.eventCategory).filter(Boolean)
           )].sort((a, b) => a.localeCompare(b, "ja"));
 
           const races = [...new Set(
@@ -175,7 +175,7 @@
                 <div class="modal-meta-item"><span class="meta-label">属性</span><span>${escapeHtml(chara.element || "")}</span></div>
                 <div class="modal-meta-item"><span class="meta-label">性別</span><span>${escapeHtml(chara.gender || "")}</span></div>
                 <div class="modal-meta-item"><span class="meta-label">ガチャ</span><span>${escapeHtml(chara.gachaType || "")}</span></div>
-                <div class="modal-meta-item"><span class="meta-label">イベント</span><span>${escapeHtml(chara.eventName || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">イベント</span><span>${escapeHtml(chara.eventCategory || "")}</span></div>
                 <div class="modal-meta-item"><span class="meta-label">種族</span><span>${escapeHtml(chara.race || "")}</span></div>
                 <div class="modal-meta-item"><span class="meta-label">実装年</span><span>${escapeHtml(chara.year || "")}</span></div>
               </div>
@@ -309,3 +309,4 @@
   </script>
 </body>
 </html>
+
