@@ -38,7 +38,6 @@
 
     <select id="eventFilter">
       <option value="">イベント</option>
-      <option value="">戦国</option>
     </select>
   </header>
 
@@ -48,7 +47,7 @@
 
   <div id="modalOverlay" class="modal-overlay" hidden>
     <div class="modal">
-      <button id="modalClose" class="modal-close" type="button">×</button>
+      <button id="modalClose" class="modal-close" type="button" aria-label="閉じる">×</button>
       <div id="modalContent"></div>
     </div>
   </div>
@@ -109,6 +108,8 @@
 
           eventNames.sort((a, b) => a.localeCompare(b, "ja"));
 
+          eventFilter.innerHTML = '<option value="">イベント</option>';
+
           for (const name of eventNames) {
             const option = document.createElement("option");
             option.value = name;
@@ -118,6 +119,11 @@
         }
 
         function openModal(chara) {
+          if (!chara) {
+            console.error("モーダルに渡すキャラデータがありません");
+            return;
+          }
+
           const tags = normalizeTags(chara.tags);
           const imageSrc = chara.image_base && chara.image_base.trim() !== ""
             ? chara.image_base
@@ -160,6 +166,7 @@
         function closeModal() {
           modalOverlay.hidden = true;
           document.body.classList.remove("modal-open");
+          modalContent.innerHTML = "";
         }
 
         function render() {
@@ -206,13 +213,12 @@
           }).join("");
 
           const buttons = document.querySelectorAll(".card-button");
-
-buttons.forEach(button => {
-  button.addEventListener("click", () => {
-    const i = button.getAttribute("data-index");
-    openModal(filtered[i]);
-  });
-});
+          buttons.forEach(button => {
+            button.addEventListener("click", () => {
+              const i = Number(button.dataset.index);
+              openModal(filtered[i]);
+            });
+          });
         }
 
         populateEventFilter();
@@ -243,4 +249,3 @@ buttons.forEach(button => {
   </script>
 </body>
 </html>
-
