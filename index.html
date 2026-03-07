@@ -57,11 +57,11 @@
           });
 
           if (filtered.length === 0) {
-            cardList.innerHTML = '<p style="padding:20px;">該当キャラがいません。</p>';
+            cardList.innerHTML = '<p class="empty-message">該当キャラがいません。</p>';
             return;
           }
 
-          cardList.innerHTML = filtered.map(chara => {
+          cardList.innerHTML = filtered.map((chara, index) => {
             const tags = normalizeTags(chara.tags);
             const imageSrc = chara.image_base && chara.image_base.trim() !== ""
               ? chara.image_base
@@ -69,16 +69,37 @@
 
             return `
               <article class="card">
-                <img src="${imageSrc}" alt="${chara.name || ''}">
-                <div class="card-body">
-                  <div class="card-title">${chara.name || ''}</div>
-                  <div class="meta">${chara.element || ''} / ${chara.gender || ''}</div>
-                  <div class="meta">${chara.gachaType || ''} / ${chara.eventName || ''}</div>
-                  <div class="meta">${tags.join(" / ")}</div>
+                <button class="card-toggle" type="button" aria-expanded="false" aria-controls="detail-${index}">
+                  <img src="${imageSrc}" alt="${chara.name || ''}">
+                  <div class="card-body">
+                    <div class="card-title">${chara.name || ''}</div>
+                    <div class="meta">${chara.gender || ''}</div>
+                  </div>
+                </button>
+
+                <div id="detail-${index}" class="card-detail" hidden>
+                  <div class="detail-row"><span class="detail-label">属性</span><span>${chara.element || ''}</span></div>
+                  <div class="detail-row"><span class="detail-label">性別</span><span>${chara.gender || ''}</span></div>
+                  <div class="detail-row"><span class="detail-label">ガチャ</span><span>${chara.gachaType || ''}</span></div>
+                  <div class="detail-row"><span class="detail-label">イベント</span><span>${chara.eventName || ''}</span></div>
+                  <div class="detail-row"><span class="detail-label">タグ</span><span>${tags.join(" / ")}</span></div>
                 </div>
               </article>
             `;
           }).join("");
+
+          const toggles = document.querySelectorAll(".card-toggle");
+
+          toggles.forEach(toggle => {
+            toggle.addEventListener("click", () => {
+              const detailId = toggle.getAttribute("aria-controls");
+              const detail = document.getElementById(detailId);
+              const isExpanded = toggle.getAttribute("aria-expanded") === "true";
+
+              toggle.setAttribute("aria-expanded", String(!isExpanded));
+              detail.hidden = isExpanded;
+            });
+          });
         }
 
         searchInput.addEventListener("input", render);
@@ -88,7 +109,7 @@
       } catch (error) {
         console.error(error);
         document.getElementById("cardList").innerHTML =
-          '<p style="padding:20px;">データの読み込みでエラーが起きました。Console を確認してください。</p>';
+          '<p class="empty-message">データの読み込みでエラーが起きました。Console を確認してください。</p>';
       }
     }
 
