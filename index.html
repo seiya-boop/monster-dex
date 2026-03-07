@@ -8,8 +8,14 @@
 </head>
 <body>
   <header class="header">
+  <div class="header-top">
     <h1>monster-dex</h1>
+    <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+      ☰
+    </button>
+  </div>
 
+  <div id="filterPanel" class="filter-panel">
     <input id="search" type="text" placeholder="名前で検索" />
     <input id="tagSearch" type="text" placeholder="タグで検索" />
 
@@ -38,14 +44,15 @@
     </select>
 
     <select id="eventFilter">
-      <option value="">イベント</option>
+      <option value="">全イベント</option>
     </select>
 
     <select id="raceFilter">
       <option value="">全種族</option>
     </select>
-  </header>
-
+  </div>
+</header>
+  
   <main>
     <div id="cardList" class="card-list"></div>
   </main>
@@ -302,5 +309,6 @@
   </script>
 </body>
 </html>
+
 
 
