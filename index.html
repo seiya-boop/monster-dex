@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>キャラ図鑑</title>
+  <title>モンスト図鑑</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="header">
-    <h1>キャラ図鑑</h1>
+    <h1>モンスト図鑑</h1>
     <input id="search" type="text" placeholder="キャラ名で検索" />
     <select id="elementFilter">
       <option value="">全属性</option>
@@ -24,6 +24,45 @@
     <div id="cardList" class="card-list"></div>
   </main>
 
-  <script src="script.js"></script>
+  <script>
+    async function loadData() {
+      const res = await fetch("data.json");
+      const data = await res.json();
+
+      const searchInput = document.getElementById("search");
+      const elementFilter = document.getElementById("elementFilter");
+      const cardList = document.getElementById("cardList");
+
+      function render() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const element = elementFilter.value;
+
+        const filtered = data.filter(chara => {
+          const matchName = chara.name.toLowerCase().includes(keyword);
+          const matchElement = !element || chara.element === element;
+          return matchName && matchElement;
+        });
+
+        cardList.innerHTML = filtered.map(chara => `
+          <article class="card">
+            <img src="${chara.image_base}" alt="${chara.name}">
+            <div class="card-body">
+              <div class="card-title">${chara.name}</div>
+              <div class="meta">${chara.element} / ${chara.gender}</div>
+              <div class="meta">${chara.gachaType} / ${chara.eventName}</div>
+              <div class="meta">${chara.tags.join(" / ")}</div>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      searchInput.addEventListener("input", render);
+      elementFilter.addEventListener("change", render);
+
+      render();
+    }
+
+    loadData();
+  </script>
 </body>
 </html>
