@@ -281,11 +281,128 @@ body.modal-open {
   z-index: 10;
   background: #fff;
   padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-top h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.menu-toggle {
+  display: none;
+  border: 1px solid #cfd4dc;
+  background: #fff;
+  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.filter-panel {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 12px;
+}
+
+#search,
+#tagSearch,
+#elementFilter,
+#genderFilter,
+#gachaFilter,
+#eventFilter,
+#raceFilter {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #cfd4dc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .filter-panel {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 12px;
+  }
+
+  .filter-panel.is-open {
+    display: flex;
+  }
+
+  #search,
+  #tagSearch,
+  #elementFilter,
+  #genderFilter,
+  #gachaFilter,
+  #eventFilter,
+  #raceFilter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .card-meta-row {
+    gap: 6px;
+  }
+
+  .element-badge {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+
+  .gender-text {
+    font-size: 12px;
+  }
+
+  .card-tag-preview {
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .mini-tag {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
 }
 
 .header h1 {
@@ -465,3 +582,4 @@ text-decoration:underline;
 .tag-chip:hover {
   background: #dfe6f5;
 }
+
