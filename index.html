@@ -58,13 +58,6 @@
       株式会社MIXIおよび当該コンテンツの提供元に帰属します。<br>
       (C) mixi, Inc. All rights reserved.
     </p>
-
-    <p>
-      <a href="https://www.monster-strike.com/" target="_blank" rel="noopener noreferrer">
-        モンスターストライク公式サイト
-      </a>
-    </p>
-
     <p>
       <a href="about.html">About</a>
     </p>
@@ -140,7 +133,7 @@
         }
 
         function populateFilters() {
-          const eventNames = [...new Set(
+          const eventCategory = [...new Set(
             data.map(item => item.eventCategory).filter(Boolean)
           )].sort((a, b) => a.localeCompare(b, "ja"));
 
@@ -148,7 +141,7 @@
             data.map(item => item.race).filter(Boolean)
           )].sort((a, b) => a.localeCompare(b, "ja"));
 
-          populateSelect(eventFilter, eventNames, "全イベント");
+          populateSelect(eventFilter, eventCategory, "全イベント");
           populateSelect(raceFilter, races, "全種族");
         }
 
@@ -231,7 +224,7 @@
             const matchElement = !selectedElement || chara.element === selectedElement;
             const matchGender = !selectedGender || chara.gender === selectedGender;
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
-            const matchEvent = !selectedEvent || chara.eventName === selectedEvent;
+            const matchEvent = !selectedEvent || chara.eventCategory === selectedEvent;
             const matchRace = !selectedRace || chara.race === selectedRace;
 
             return matchName && matchTag && matchElement && matchGender && matchGacha && matchEvent && matchRace;
@@ -309,4 +302,5 @@
   </script>
 </body>
 </html>
+
 
