@@ -1,20 +1,20 @@
 body {
   font-family: sans-serif;
   margin: 0;
-  background: #f7f7fb;
+  background: #f6f7fb;
   color: #222;
 }
 
 .header {
   position: sticky;
   top: 0;
-  background: white;
+  background: #fff;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   display: flex;
   gap: 12px;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .header h1 {
@@ -22,21 +22,22 @@ body {
   font-size: 24px;
 }
 
-#search, #elementFilter {
-  padding: 8px 12px;
+#search,
+#elementFilter {
+  padding: 10px 12px;
   font-size: 14px;
 }
 
 .card-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
   padding: 20px;
 }
 
 .card {
-  background: white;
-  border-radius: 14px;
+  background: #fff;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(0,0,0,0.08);
 }
@@ -46,6 +47,7 @@ body {
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
+  background: #eee;
 }
 
 .card-body {
@@ -53,7 +55,7 @@ body {
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
 }
@@ -61,4 +63,5 @@ body {
 .meta {
   font-size: 13px;
   color: #666;
+  margin-top: 4px;
 }
