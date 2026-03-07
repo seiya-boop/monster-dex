@@ -228,6 +228,8 @@
 
             const matchName = (chara.name || "").toLowerCase().includes(keyword);
             const matchTag = !tagKeyword || tags.some(tag => tag.toLowerCase().includes(tagKeyword));
+            const menuToggle = document.getElementById("menuToggle");
+            const filterPanel = document.getElementById("filterPanel");
             const matchElement = !selectedElement || chara.element === selectedElement;
             const matchGender = !selectedGender || chara.gender === selectedGender;
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
@@ -281,6 +283,11 @@
 
         populateFilters();
 
+        menuToggle.addEventListener("click", () => {
+  const isOpen = filterPanel.classList.toggle("is-open");
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
         searchInput.addEventListener("input", render);
         tagSearchInput.addEventListener("input", render);
         elementFilter.addEventListener("change", render);
@@ -309,6 +316,7 @@
   </script>
 </body>
 </html>
+
 
 
 
