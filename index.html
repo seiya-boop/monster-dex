@@ -9,8 +9,9 @@
 <body>
   <header class="header">
     <h1>monster-dex</h1>
-    
-    <input id="search" type="text" placeholder="検索" />
+
+    <input id="search" type="text" placeholder="名前で検索" />
+    <input id="tagSearch" type="text" placeholder="タグで検索" />
 
     <select id="elementFilter">
       <option value="">全属性</option>
@@ -22,7 +23,7 @@
     </select>
 
     <select id="genderFilter">
-      <option value="">ジェンダー</option>
+      <option value="">全ジェンダー</option>
       <option value="男性">男性</option>
       <option value="女性">女性</option>
       <option value="男性,女性">男性,女性</option>
@@ -39,37 +40,41 @@
     <select id="eventFilter">
       <option value="">イベント</option>
     </select>
+
+    <select id="raceFilter">
+      <option value="">全種族</option>
+    </select>
   </header>
 
   <main>
     <div id="cardList" class="card-list"></div>
   </main>
 
-<footer class="site-footer">
-<p>
-当サイトは「モンスターストライク」の非公式ファンサイトです。<br>
-株式会社MIXIおよび公式運営とは関係ありません。<br>
-キャラクター画像の著作権は株式会社MIXIおよび各権利者に帰属します。<br>
-(C) mixi, Inc. All rights reserved.
-</p>
+  <footer class="site-footer">
+    <p>
+      当サイトは「モンスターストライク」の非公式ファンサイトです。<br>
+      株式会社MIXIおよび公式運営とは関係ありません。<br>
+      当サイト上で使用しているゲーム画像の著作権および商標権、その他知的財産権は、
+      株式会社MIXIおよび当該コンテンツの提供元に帰属します。<br>
+      (C) mixi, Inc. All rights reserved.
+    </p>
 
-<p>
-<a href="https://www.monster-strike.com/" target="_blank">
-モンスターストライク公式サイト
-</a>
-</p>
+    <p>
+      <a href="https://www.monster-strike.com/" target="_blank" rel="noopener noreferrer">
+        モンスターストライク公式サイト
+      </a>
+    </p>
 
-<p>
-<a href="about.html">About</a>
-</p>
-</footer>
-  
+    <p>
+      <a href="about.html">About</a>
+    </p>
+  </footer>
+
   <div id="modalOverlay" class="modal-overlay" hidden>
     <div class="modal">
       <button id="modalClose" class="modal-close" type="button" aria-label="閉じる">×</button>
       <div id="modalContent"></div>
     </div>
-
   </div>
 
   <script>
@@ -83,10 +88,12 @@
         const data = await res.json();
 
         const searchInput = document.getElementById("search");
+        const tagSearchInput = document.getElementById("tagSearch");
         const elementFilter = document.getElementById("elementFilter");
         const genderFilter = document.getElementById("genderFilter");
         const gachaFilter = document.getElementById("gachaFilter");
         const eventFilter = document.getElementById("eventFilter");
+        const raceFilter = document.getElementById("raceFilter");
         const cardList = document.getElementById("cardList");
 
         const modalOverlay = document.getElementById("modalOverlay");
@@ -121,21 +128,28 @@
           }
         }
 
-        function populateEventFilter() {
+        function populateSelect(selectEl, values, defaultLabel) {
+          selectEl.innerHTML = `<option value="">${defaultLabel}</option>`;
+
+          values.forEach(value => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = value;
+            selectEl.appendChild(option);
+          });
+        }
+
+        function populateFilters() {
           const eventNames = [...new Set(
             data.map(item => item.eventName).filter(Boolean)
-          )];
+          )].sort((a, b) => a.localeCompare(b, "ja"));
 
-          eventNames.sort((a, b) => a.localeCompare(b, "ja"));
+          const races = [...new Set(
+            data.map(item => item.race).filter(Boolean)
+          )].sort((a, b) => a.localeCompare(b, "ja"));
 
-          eventFilter.innerHTML = '<option value="">イベント</option>';
-
-          for (const name of eventNames) {
-            const option = document.createElement("option");
-            option.value = name;
-            option.textContent = name;
-            eventFilter.appendChild(option);
-          }
+          populateSelect(eventFilter, eventNames, "全イベント");
+          populateSelect(raceFilter, races, "全種族");
         }
 
         function openModal(chara) {
@@ -171,7 +185,7 @@
                 <div class="tag-list">
                   ${
                     tags.length
-                      ? tags.map(tag => `<span class="tag-chip">${escapeHtml(tag)}</span>`).join("")
+                      ? tags.map(tag => `<button class="tag-chip" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join("")
                       : '<span class="tag-empty">タグなし</span>'
                   }
                 </div>
@@ -181,6 +195,17 @@
 
           modalOverlay.hidden = false;
           document.body.classList.add("modal-open");
+
+          const tagButtons = modalContent.querySelectorAll(".tag-chip");
+          tagButtons.forEach(button => {
+            button.addEventListener("click", () => {
+              const tag = button.dataset.tag || "";
+              tagSearchInput.value = tag;
+              closeModal();
+              render();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+          });
         }
 
         function closeModal() {
@@ -191,19 +216,25 @@
 
         function render() {
           const keyword = searchInput.value.trim().toLowerCase();
+          const tagKeyword = tagSearchInput.value.trim().toLowerCase();
           const selectedElement = elementFilter.value;
           const selectedGender = genderFilter.value;
           const selectedGacha = gachaFilter.value;
           const selectedEvent = eventFilter.value;
+          const selectedRace = raceFilter.value;
 
           const filtered = data.filter(chara => {
+            const tags = normalizeTags(chara.tags);
+
             const matchName = (chara.name || "").toLowerCase().includes(keyword);
+            const matchTag = !tagKeyword || tags.some(tag => tag.toLowerCase().includes(tagKeyword));
             const matchElement = !selectedElement || chara.element === selectedElement;
             const matchGender = !selectedGender || chara.gender === selectedGender;
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
             const matchEvent = !selectedEvent || chara.eventName === selectedEvent;
+            const matchRace = !selectedRace || chara.race === selectedRace;
 
-            return matchName && matchElement && matchGender && matchGacha && matchEvent;
+            return matchName && matchTag && matchElement && matchGender && matchGacha && matchEvent && matchRace;
           });
 
           if (filtered.length === 0) {
@@ -216,6 +247,8 @@
               ? chara.image_base
               : "https://placehold.co/400x400?text=No+Image";
 
+            const previewTags = normalizeTags(chara.tags).slice(0, 3);
+
             return `
               <article class="card">
                 <button class="card-button" type="button" data-index="${index}">
@@ -226,6 +259,11 @@
                       <span class="element-badge ${createBadgeClass(chara.element)}">${escapeHtml(chara.element || "")}</span>
                       <span class="gender-text">${escapeHtml(chara.gender || "")}</span>
                     </div>
+                    ${
+                      previewTags.length
+                        ? `<div class="card-tag-preview">${previewTags.map(tag => `<span class="mini-tag">${escapeHtml(tag)}</span>`).join("")}</div>`
+                        : ""
+                    }
                   </div>
                 </button>
               </article>
@@ -241,13 +279,15 @@
           });
         }
 
-        populateEventFilter();
+        populateFilters();
 
         searchInput.addEventListener("input", render);
+        tagSearchInput.addEventListener("input", render);
         elementFilter.addEventListener("change", render);
         genderFilter.addEventListener("change", render);
         gachaFilter.addEventListener("change", render);
         eventFilter.addEventListener("change", render);
+        raceFilter.addEventListener("change", render);
 
         modalClose.addEventListener("click", closeModal);
         modalOverlay.addEventListener("click", (e) => {
@@ -269,6 +309,3 @@
   </script>
 </body>
 </html>
-
-
-
