@@ -88,7 +88,6 @@
         const data = await res.json();
 
         const searchInput = document.getElementById("search");
-        const tagSearchInput = document.getElementById("tagSearch");
         const elementFilter = document.getElementById("elementFilter");
         const genderFilter = document.getElementById("genderFilter");
         const gachaFilter = document.getElementById("gachaFilter");
@@ -203,7 +202,7 @@
           tagButtons.forEach(button => {
             button.addEventListener("click", () => {
               const tag = button.dataset.tag || "";
-              tagSearchInput.value = tag;
+              searchInput.value = tag;
               closeModal();
               render();
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -219,7 +218,6 @@
 
         function render() {
           const keyword = searchInput.value.trim().toLowerCase();
-          const tagKeyword = tagSearchInput.value.trim().toLowerCase();
           const selectedElement = elementFilter.value;
           const selectedGender = genderFilter.value;
           const selectedGacha = gachaFilter.value;
@@ -229,16 +227,19 @@
           const filtered = data.filter(chara => {
             const tags = normalizeTags(chara.tags);
 
-            const matchName = (chara.name || "").toLowerCase().includes(keyword);
-            const matchTag = !tagKeyword || tags.some(tag => tag.toLowerCase().includes(tagKeyword));
+            const searchableText = [
+  chara.name || "",
+  ...tags
+].join(" ").toLowerCase();
+
+const matchKeyword = !keyword || searchableText.includes(keyword);
             const matchElement = !selectedElement || chara.element === selectedElement;
             const matchGender =  !selectedGender ||  (chara.gender && chara.gender.includes(selectedGender));
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
             const matchEvent = !selectedEvent || chara.eventCategory === selectedEvent;
             const matchRace = !selectedRace || chara.race === selectedRace;
 
-            return matchName && matchTag && matchElement && matchGender && matchGacha && matchEvent && matchRace;
-          });
+            return matchKeyword && matchElement && matchGender && matchGacha && matchEvent && matchRace;
 
           if (filtered.length === 0) {
             cardList.innerHTML = '<p class="empty-message">該当キャラがいません。</p>';
@@ -283,7 +284,6 @@
         });
 
         searchInput.addEventListener("input", render);
-        tagSearchInput.addEventListener("input", render);
         elementFilter.addEventListener("change", render);
         genderFilter.addEventListener("change", render);
         gachaFilter.addEventListener("change", render);
@@ -310,4 +310,3 @@
   </script>
 </body>
 </html>
-
