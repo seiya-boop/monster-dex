@@ -16,7 +16,7 @@
     </div>
 
     <div id="filterPanel" class="filter-panel">
-<input id="search" type="text" placeholder="名前・特徴で検索" />
+      <input id="search" type="text" placeholder="名前・特徴で検索" />
 
       <select id="elementFilter">
         <option value="">全属性</option>
@@ -115,7 +115,7 @@
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
+            .replace(/\"/g, "&quot;")
             .replace(/'/g, "&#039;");
         }
 
@@ -226,20 +226,20 @@
 
           const filtered = data.filter(chara => {
             const tags = normalizeTags(chara.tags);
-
             const searchableText = [
-  chara.name || "",
-  ...tags
-].join(" ").toLowerCase();
+              chara.name || "",
+              ...tags
+            ].join(" ").toLowerCase();
 
-const matchKeyword = !keyword || searchableText.includes(keyword);
+            const matchKeyword = !keyword || searchableText.includes(keyword);
             const matchElement = !selectedElement || chara.element === selectedElement;
-            const matchGender =  !selectedGender ||  (chara.gender && chara.gender.includes(selectedGender));
+            const matchGender = !selectedGender || (chara.gender && chara.gender.includes(selectedGender));
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
             const matchEvent = !selectedEvent || chara.eventCategory === selectedEvent;
             const matchRace = !selectedRace || chara.race === selectedRace;
 
             return matchKeyword && matchElement && matchGender && matchGacha && matchEvent && matchRace;
+          });
 
           if (filtered.length === 0) {
             cardList.innerHTML = '<p class="empty-message">該当キャラがいません。</p>';
@@ -254,13 +254,12 @@ const matchKeyword = !keyword || searchableText.includes(keyword);
             return `
               <article class="card">
                 <button class="card-button" type="button" data-index="${index}">
-                 <img loading="lazy" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
+                  <img loading="lazy" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
                   <div class="card-body">
                     <div class="card-title">${escapeHtml(chara.name || "")}</div>
                     <div class="card-meta-row">
                       <span class="element-badge ${createBadgeClass(chara.element)}">${escapeHtml(chara.element || "")}</span>
                     </div>
-               
                   </div>
                 </button>
               </article>
