@@ -122,8 +122,27 @@ main {
   margin-top: 14px;
 }
 
+.search-bar-wrap {
+  margin-top: 12px;
+}
+
+.search-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 44px;
+  border: 1px solid #c9ced6;
+  border-radius: 12px;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.search-input::placeholder {
+  color: #9aa3ad;
+}
+
 #search,
-#tagSearch,
 #elementFilter,
 #genderFilter,
 #gachaFilter,
@@ -137,8 +156,7 @@ main {
   color: var(--text);
 }
 
-#search,
-#tagSearch {
+#search {
   min-width: 220px;
   flex: 1 1 220px;
 }
@@ -153,7 +171,6 @@ main {
 }
 
 #search:focus,
-#tagSearch:focus,
 #elementFilter:focus,
 #genderFilter:focus,
 #gachaFilter:focus,
@@ -554,5 +571,42 @@ main {
   .modal-meta-grid {
     grid-template-columns: 1fr;
   }
+
+     .search-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: #f6f7fb;
+  }
+
+  .search-input {
+    height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+  .filter-panel {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .filter-panel.is-open {
+    display: flex;
+  }
+
+  .filter-panel select {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
 }
+}
+
 
