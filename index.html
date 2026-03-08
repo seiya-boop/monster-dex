@@ -8,53 +8,53 @@
 </head>
 <body>
   <header class="header">
-  <div class="header-top">
-    <h1>monster-dex</h1>
-    <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="filterPanel">
-      ☰
-    </button>
-  </div>
+    <div class="header-top">
+      <h1>monster-dex</h1>
+      <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="filterPanel" aria-label="フィルターを開く">
+        ☰
+      </button>
+    </div>
 
-  <div class="search-bar-wrap">
-    <input id="search" class="search-input" type="text" placeholder="名前・特徴で検索" />
-  </div>
+    <div class="search-bar-wrap">
+      <input id="search" class="search-input" type="text" placeholder="名前・特徴で検索" />
+    </div>
 
-  <div id="filterPanel" class="filter-panel">
-    <select id="elementFilter">
-      <option value="">全属性</option>
-      <option value="火">火</option>
-      <option value="水">水</option>
-      <option value="木">木</option>
-      <option value="光">光</option>
-      <option value="闇">闇</option>
-    </select>
+    <div id="filterPanel" class="filter-panel">
+      <select id="elementFilter">
+        <option value="">全属性</option>
+        <option value="火">火</option>
+        <option value="水">水</option>
+        <option value="木">木</option>
+        <option value="光">光</option>
+        <option value="闇">闇</option>
+      </select>
 
-    <select id="genderFilter">
-      <option value="">全ジェンダー</option>
-      <option value="♂">♂</option>
-      <option value="♀">♀</option>
-      <option value="♂,♀">♂,♀</option>
-      <option value="♂,♂">♂,♂</option>
-      <option value="♀,♀">♀,♀</option>
-      <option value="?">?</option>
-    </select>
+      <select id="genderFilter">
+        <option value="">全ジェンダー</option>
+        <option value="♂">♂</option>
+        <option value="♀">♀</option>
+        <option value="♂,♀">♂,♀</option>
+        <option value="♂,♂">♂,♂</option>
+        <option value="♀,♀">♀,♀</option>
+        <option value="?">?</option>
+      </select>
 
-    <select id="gachaFilter">
-      <option value="">ガチャ</option>
-      <option value="恒常">恒常</option>
-      <option value="限定">限定</option>
-      <option value="α">α</option>
-    </select>
+      <select id="gachaFilter">
+        <option value="">ガチャ</option>
+        <option value="恒常">恒常</option>
+        <option value="限定">限定</option>
+        <option value="α">α</option>
+      </select>
 
-    <select id="eventFilter">
-      <option value="">全イベント</option>
-    </select>
+      <select id="eventFilter">
+        <option value="">全イベント</option>
+      </select>
 
-    <select id="raceFilter">
-      <option value="">全種族</option>
-    </select>
-  </div>
-</header>
+      <select id="raceFilter">
+        <option value="">全種族</option>
+      </select>
+    </div>
+  </header>
 
   <main>
     <div id="cardList" class="card-list"></div>
@@ -169,7 +169,7 @@
 
           modalContent.innerHTML = `
             <div class="modal-image-wrap">
-              <img class="modal-image" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
+              <img loading="lazy" class="modal-image" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
             </div>
 
             <div class="modal-body">
@@ -311,4 +311,3 @@
   </script>
 </body>
 </html>
-
