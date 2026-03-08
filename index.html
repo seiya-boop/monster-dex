@@ -233,7 +233,7 @@
             const matchName = (chara.name || "").toLowerCase().includes(keyword);
             const matchTag = !tagKeyword || tags.some(tag => tag.toLowerCase().includes(tagKeyword));
             const matchElement = !selectedElement || chara.element === selectedElement;
-            const matchGender = !selectedGender || chara.gender === selectedGender;
+            const matchGender =  !selectedGender ||  (chara.gender && chara.gender.includes(selectedGender));
             const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
             const matchEvent = !selectedEvent || chara.eventCategory === selectedEvent;
             const matchRace = !selectedRace || chara.race === selectedRace;
@@ -251,23 +251,16 @@
               ? chara.image_base
               : "https://placehold.co/400x400?text=No+Image";
 
-            const previewTags = normalizeTags(chara.tags).slice(0, 3);
-
             return `
               <article class="card">
                 <button class="card-button" type="button" data-index="${index}">
-                  <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
+                 <img loading="lazy" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
                   <div class="card-body">
                     <div class="card-title">${escapeHtml(chara.name || "")}</div>
                     <div class="card-meta-row">
                       <span class="element-badge ${createBadgeClass(chara.element)}">${escapeHtml(chara.element || "")}</span>
-                      <span class="gender-text">${escapeHtml(chara.gender || "")}</span>
                     </div>
-                    ${
-                      previewTags.length
-                        ? `<div class="card-tag-preview">${previewTags.map(tag => `<span class="mini-tag">${escapeHtml(tag)}</span>`).join("")}</div>`
-                        : ""
-                    }
+               
                   </div>
                 </button>
               </article>
