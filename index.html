@@ -8,6 +8,325 @@
 </head>
 <body>
   <header class="header">
+    <div class="header-top">
+      <h1>monster-dex</h1>
+      <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="filterPanel">
+        ☰
+      </button>
+    </div>
+
+    <div id="filterPanel" class="filter-panel">
+      <input id="search" type="text" placeholder="名前で検索" />
+      <input id="tagSearch" type="text" placeholder="タグで検索" />
+
+      <select id="elementFilter">
+        <option value="">全属性</option>
+        <option value="火">火</option>
+        <option value="水">水</option>
+        <option value="木">木</option>
+        <option value="光">光</option>
+        <option value="闇">闇</option>
+      </select>
+
+      <select id="genderFilter">
+        <option value="">全ジェンダー</option>
+        <option value="♂">♂</option>
+        <option value="♀">♀</option>
+        <option value="♂,♀">♂,♀</option>
+        <option value="♂,♂">♂,♂</option>
+        <option value="♀,♀">♀,♀</option>
+        <option value="?">?</option>
+      </select>
+
+      <select id="gachaFilter">
+        <option value="">ガチャ</option>
+        <option value="恒常">恒常</option>
+        <option value="限定">限定</option>
+        <option value="α">α</option>
+      </select>
+
+      <select id="eventFilter">
+        <option value="">全イベント</option>
+      </select>
+
+      <select id="raceFilter">
+        <option value="">全種族</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <div id="cardList" class="card-list"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      当サイトは「モンスターストライク」の非公式ファンツールです。株式会社MIXIおよび公式運営とは関係ありません。<br>
+      当サイト上で使用しているゲーム画像の著作権および商標権、その他知的財産権は、
+      株式会社MIXIおよび当該コンテンツの提供元に帰属します。<br>
+      (C) mixi, Inc. All rights reserved.
+    </p>
+    <p>
+      <a href="about.html">About</a>
+    </p>
+  </footer>
+
+  <div id="modalOverlay" class="modal-overlay" hidden>
+    <div class="modal">
+      <button id="modalClose" class="modal-close" type="button" aria-label="閉じる">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadData() {
+      try {
+        const res = await fetch("data.json");
+        if (!res.ok) {
+          throw new Error("data.json の読み込みに失敗しました: " + res.status);
+        }
+
+        const data = await res.json();
+
+        const searchInput = document.getElementById("search");
+        const tagSearchInput = document.getElementById("tagSearch");
+        const elementFilter = document.getElementById("elementFilter");
+        const genderFilter = document.getElementById("genderFilter");
+        const gachaFilter = document.getElementById("gachaFilter");
+        const eventFilter = document.getElementById("eventFilter");
+        const raceFilter = document.getElementById("raceFilter");
+        const cardList = document.getElementById("cardList");
+
+        const modalOverlay = document.getElementById("modalOverlay");
+        const modalContent = document.getElementById("modalContent");
+        const modalClose = document.getElementById("modalClose");
+
+        const menuToggle = document.getElementById("menuToggle");
+        const filterPanel = document.getElementById("filterPanel");
+
+        function normalizeTags(tags) {
+          if (Array.isArray(tags)) return tags;
+          if (typeof tags === "string" && tags.trim() !== "") {
+            return tags.split(",").map(tag => tag.trim()).filter(Boolean);
+          }
+          return [];
+        }
+
+        function escapeHtml(text) {
+          return String(text ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+        }
+
+        function createBadgeClass(element) {
+          switch (element) {
+            case "火": return "badge-fire";
+            case "水": return "badge-water";
+            case "木": return "badge-wood";
+            case "光": return "badge-light";
+            case "闇": return "badge-dark";
+            default: return "";
+          }
+        }
+
+        function populateSelect(selectEl, values, defaultLabel) {
+          selectEl.innerHTML = `<option value="">${defaultLabel}</option>`;
+
+          values.forEach(value => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = value;
+            selectEl.appendChild(option);
+          });
+        }
+
+        function populateFilters() {
+          const eventCategory = [...new Set(
+            data.map(item => item.eventCategory).filter(Boolean)
+          )].sort((a, b) => a.localeCompare(b, "ja"));
+
+          const races = [...new Set(
+            data.map(item => item.race).filter(Boolean)
+          )].sort((a, b) => a.localeCompare(b, "ja"));
+
+          populateSelect(eventFilter, eventCategory, "全イベント");
+          populateSelect(raceFilter, races, "全種族");
+        }
+
+        function openModal(chara) {
+          if (!chara) {
+            console.error("モーダルに渡すキャラデータがありません");
+            return;
+          }
+
+          const tags = normalizeTags(chara.tags);
+          const imageSrc = chara.image_base && chara.image_base.trim() !== ""
+            ? chara.image_base
+            : "https://placehold.co/500x500?text=No+Image";
+
+          modalContent.innerHTML = `
+            <div class="modal-image-wrap">
+              <img class="modal-image" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
+            </div>
+
+            <div class="modal-body">
+              <h2 class="modal-title">${escapeHtml(chara.name || "")}</h2>
+
+              <div class="modal-meta-grid">
+                <div class="modal-meta-item"><span class="meta-label">属性</span><span>${escapeHtml(chara.element || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">性別</span><span>${escapeHtml(chara.gender || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">ガチャ</span><span>${escapeHtml(chara.gachaType || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">イベント</span><span>${escapeHtml(chara.eventCategory || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">種族</span><span>${escapeHtml(chara.race || "")}</span></div>
+                <div class="modal-meta-item"><span class="meta-label">実装年</span><span>${escapeHtml(chara.year || "")}</span></div>
+              </div>
+
+              <div class="tags-section">
+                <div class="meta-label">特徴タグ</div>
+                <div class="tag-list">
+                  ${
+                    tags.length
+                      ? tags.map(tag => `<button class="tag-chip" type="button" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join("")
+                      : '<span class="tag-empty">タグなし</span>'
+                  }
+                </div>
+              </div>
+            </div>
+          `;
+
+          modalOverlay.hidden = false;
+          document.body.classList.add("modal-open");
+
+          const tagButtons = modalContent.querySelectorAll(".tag-chip");
+          tagButtons.forEach(button => {
+            button.addEventListener("click", () => {
+              const tag = button.dataset.tag || "";
+              tagSearchInput.value = tag;
+              closeModal();
+              render();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+          });
+        }
+
+        function closeModal() {
+          modalOverlay.hidden = true;
+          document.body.classList.remove("modal-open");
+          modalContent.innerHTML = "";
+        }
+
+        function render() {
+          const keyword = searchInput.value.trim().toLowerCase();
+          const tagKeyword = tagSearchInput.value.trim().toLowerCase();
+          const selectedElement = elementFilter.value;
+          const selectedGender = genderFilter.value;
+          const selectedGacha = gachaFilter.value;
+          const selectedEvent = eventFilter.value;
+          const selectedRace = raceFilter.value;
+
+          const filtered = data.filter(chara => {
+            const tags = normalizeTags(chara.tags);
+
+            const matchName = (chara.name || "").toLowerCase().includes(keyword);
+            const matchTag = !tagKeyword || tags.some(tag => tag.toLowerCase().includes(tagKeyword));
+            const matchElement = !selectedElement || chara.element === selectedElement;
+            const matchGender = !selectedGender || chara.gender === selectedGender;
+            const matchGacha = !selectedGacha || chara.gachaType === selectedGacha;
+            const matchEvent = !selectedEvent || chara.eventCategory === selectedEvent;
+            const matchRace = !selectedRace || chara.race === selectedRace;
+
+            return matchName && matchTag && matchElement && matchGender && matchGacha && matchEvent && matchRace;
+          });
+
+          if (filtered.length === 0) {
+            cardList.innerHTML = '<p class="empty-message">該当キャラがいません。</p>';
+            return;
+          }
+
+          cardList.innerHTML = filtered.map((chara, index) => {
+            const imageSrc = chara.image_base && chara.image_base.trim() !== ""
+              ? chara.image_base
+              : "https://placehold.co/400x400?text=No+Image";
+
+            const previewTags = normalizeTags(chara.tags).slice(0, 3);
+
+            return `
+              <article class="card">
+                <button class="card-button" type="button" data-index="${index}">
+                  <img src="${escapeHtml(imageSrc)}" alt="${escapeHtml(chara.name || "")}">
+                  <div class="card-body">
+                    <div class="card-title">${escapeHtml(chara.name || "")}</div>
+                    <div class="card-meta-row">
+                      <span class="element-badge ${createBadgeClass(chara.element)}">${escapeHtml(chara.element || "")}</span>
+                      <span class="gender-text">${escapeHtml(chara.gender || "")}</span>
+                    </div>
+                    ${
+                      previewTags.length
+                        ? `<div class="card-tag-preview">${previewTags.map(tag => `<span class="mini-tag">${escapeHtml(tag)}</span>`).join("")}</div>`
+                        : ""
+                    }
+                  </div>
+                </button>
+              </article>
+            `;
+          }).join("");
+
+          const buttons = document.querySelectorAll(".card-button");
+          buttons.forEach(button => {
+            button.addEventListener("click", () => {
+              const i = Number(button.dataset.index);
+              openModal(filtered[i]);
+            });
+          });
+        }
+
+        populateFilters();
+
+        menuToggle.addEventListener("click", () => {
+          const isOpen = filterPanel.classList.toggle("is-open");
+          menuToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        searchInput.addEventListener("input", render);
+        tagSearchInput.addEventListener("input", render);
+        elementFilter.addEventListener("change", render);
+        genderFilter.addEventListener("change", render);
+        gachaFilter.addEventListener("change", render);
+        eventFilter.addEventListener("change", render);
+        raceFilter.addEventListener("change", render);
+
+        modalClose.addEventListener("click", closeModal);
+        modalOverlay.addEventListener("click", (e) => {
+          if (e.target === modalOverlay) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
+        });
+
+        render();
+      } catch (error) {
+        console.error(error);
+        document.getElementById("cardList").innerHTML =
+          '<p class="empty-message">データの読み込みでエラーが起きました。Console を確認してください。</p>';
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>monster-dex</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
   <div class="header-top">
     <h1>monster-dex</h1>
     <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="filterPanel">
@@ -317,6 +636,7 @@
   </script>
 </body>
 </html>
+
 
 
 
