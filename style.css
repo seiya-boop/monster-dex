@@ -472,18 +472,16 @@ main {
     flex-shrink: 0;
   }
 
-  .filter-panel {
-    display: none;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-top: 12px;
-  }
+.filter-panel {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
 
-  .filter-panel.is-open {
-    display: flex;
-  }
-
+.filter-panel.is-open {
+  display: flex;
+}
   #search,
   #tagSearch,
   #elementFilter,
@@ -557,3 +555,4 @@ main {
     grid-template-columns: 1fr;
   }
 }
+
