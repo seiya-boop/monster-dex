@@ -1,11 +1,9 @@
 /* =====================================
    monster-dex / cleaned style.css
-   index.html の現在構成に合わせた整理版
-   - 重複CSSを削除
-   - .card-button ベースに統一
-   - スマホ2列を安定化
-   - ハンバーガーメニュー整理
-   - モーダルとフッターも維持
+   現在の index.html 構成に合わせた整理版
+   - PCでは検索欄もフィルター群と同じ横幅内に配置
+   - SPでは検索欄を上部常設、詳細フィルターはハンバーガー内
+   - 重複定義と崩れやすい指定を整理
 ===================================== */
 
 * {
@@ -73,9 +71,11 @@ main {
 }
 
 .header-top,
+.search-bar-wrap,
 .filter-panel {
   width: min(var(--max-width), 100%);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .header-top {
@@ -114,51 +114,34 @@ main {
   transform: scale(0.98);
 }
 
-.filter-panel {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
+.search-bar-wrap {
   margin-top: 14px;
 }
 
-.search-bar-wrap {
-  margin-top: 12px;
-}
-
 .search-input {
-  width: 100%;
+  display: block;
+  width: 220px;
+  max-width: 100%;
   height: 44px;
   padding: 0 12px;
   font-size: 14px;
   line-height: 44px;
-  border: 1px solid #c9ced6;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  box-sizing: border-box;
-  background: #fff;
+  background: var(--surface);
+  color: var(--text);
 }
 
 .search-input::placeholder {
   color: #9aa3ad;
 }
 
-#search,
-#elementFilter,
-#genderFilter,
-#gachaFilter,
-#eventFilter,
-#raceFilter {
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text);
-}
-
-#search {
-  min-width: 220px;
-  flex: 1 1 220px;
+.filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
 }
 
 #elementFilter,
@@ -167,10 +150,15 @@ main {
 #eventFilter,
 #raceFilter {
   min-width: 140px;
-  flex: 0 1 auto;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
 }
 
-#search:focus,
+.search-input:focus,
 #elementFilter:focus,
 #genderFilter:focus,
 #gachaFilter:focus,
@@ -489,18 +477,32 @@ main {
     flex-shrink: 0;
   }
 
-.filter-panel {
-  display: none;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
-}
+  .search-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin-top: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: var(--bg);
+  }
 
-.filter-panel.is-open {
-  display: flex;
-}
-  #search,
-  #tagSearch,
+  .search-input {
+    width: 100%;
+    height: 44px;
+  }
+
+  .filter-panel {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .filter-panel.is-open {
+    display: flex;
+  }
+
   #elementFilter,
   #genderFilter,
   #gachaFilter,
@@ -571,42 +573,4 @@ main {
   .modal-meta-grid {
     grid-template-columns: 1fr;
   }
-
-     .search-bar-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    background: #f6f7fb;
-  }
-
-  .search-input {
-    height: 44px;
-    padding: 0 12px;
-    font-size: 14px;
-    border-radius: 12px;
-  }
-
-  .filter-panel {
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 10px;
-  }
-
-  .filter-panel.is-open {
-    display: flex;
-  }
-
-  .filter-panel select {
-    width: 100%;
-    height: 44px;
-    padding: 0 12px;
-    font-size: 14px;
-    box-sizing: border-box;
-  }
 }
-}
-
-
